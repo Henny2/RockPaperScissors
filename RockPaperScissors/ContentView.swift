@@ -5,9 +5,6 @@
 //  Created by Henrieke Baunack on 10/18/23.
 //
 
-// need to reset the state and reshuffle
-// should prbly add an alarm showing the score and the reshuffle
-// should show alarm after 10 rounds to show final score
 
 import SwiftUI
 
@@ -18,6 +15,8 @@ struct ContentView: View {
 //    @State var userShouldWin = Bool.random()
     @State var userShouldWin = true
     @State var score = 0
+    @State var gameCounter = 0
+    @State var endOfGame = false
     
     func evaluateSelection(selection: String) -> Void {
         print("in function: \(selection) was selected")
@@ -93,6 +92,17 @@ struct ContentView: View {
                 score += 0
             }
         }
+        gameCounter += 1
+        if gameCounter == 10 {
+            endOfGame = true
+        }
+    }
+    
+    func resetGame() -> Void {
+        gameCounter = 0
+        chosenMove = Int.random(in: 0...2)
+        userShouldWin = Bool.random()
+        score = 0
     }
     
     var body: some View {
@@ -134,6 +144,10 @@ struct ContentView: View {
                         .background(.mint)
                 }
 
+            }.alert("End of the game! Your score: \(score)", isPresented: $endOfGame){
+                Button("New game", action: resetGame)
+            } message: {
+                Text("Good job, click the button to try again.")
             }
                         
             Spacer()
